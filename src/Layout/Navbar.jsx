@@ -9,7 +9,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed top-0 ml-10 left-0 w-full md:w-24 bg-black flex md:flex-col flex-row justify-between md:items-center items-center px-6 md:py-6 h-20 md:h-screen rounded-none md:rounded-2xl shadow-lg z-50">
+    <div className="fixed top-0 md:ml-10 left-0 w-full md:w-24 bg-black flex md:flex-col flex-row justify-between md:items-center items-center px-6 md:py-6 h-20 md:h-screen rounded-none md:rounded-2xl shadow-lg z-50">
       
       {/* Logo */}
       <motion.div
