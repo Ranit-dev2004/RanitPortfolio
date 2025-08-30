@@ -27,7 +27,7 @@ export default function AboutMe() {
   </motion.h2>
 
   <p className="text-lg leading-relaxed mb-6 ml-12">
-    I am <span className="text-white font-semibold">Ranit</span> — not just a builder of code, 
+    Hey there! <span className="text-white font-semibold">I'm Ranit</span> — not just a builder of code, 
     but a seeker of meaning through creation. To me, every line of logic, every interface, 
     every design is a dialogue between the self and the infinite. 
     My path weaves through 
@@ -59,12 +59,7 @@ export default function AboutMe() {
     </span>
   </a>
 </div>
-
-
 </div>
-
-
-
         {/* Right - Image */}
         <div className="relative flex justify-center">
           <img 
