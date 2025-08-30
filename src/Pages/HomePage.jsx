@@ -4,7 +4,9 @@ import { Suspense, useRef } from "react";
 import AngelModel from "../Components/Angelmodel";
 import Navbar from "../Layout/Navbar";
 import Intro from "../Components/Intro";
+import ProjectsSection from "../Layout/Projects";
 import * as THREE from "three";
+import AboutMe from "../Layout/Aboutme";
 
 export default function Homepage() {
   const spotTarget = useRef();
@@ -71,6 +73,8 @@ export default function Homepage() {
           rotateSpeed={0.6}
         />
       </Canvas>
+      <ProjectsSection />
+      <AboutMe  />
     </div>
   );
 }
