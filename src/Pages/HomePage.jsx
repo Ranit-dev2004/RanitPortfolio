@@ -7,6 +7,7 @@ import Intro from "../Components/Intro";
 import ProjectsSection from "../Layout/Projects";
 import * as THREE from "three";
 import AboutMe from "../Layout/Aboutme";
+import Footer from "../Layout/Footer";
 
 export default function Homepage() {
   const spotTarget = useRef();
@@ -75,6 +76,7 @@ export default function Homepage() {
       </Canvas>
       <ProjectsSection />
       <AboutMe  />
+      <Footer />
     </div>
   );
 }
