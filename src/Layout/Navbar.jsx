@@ -76,33 +76,31 @@ const Navbar = () => {
         )}
       </motion.div>
 
-      {/* Socials */}
-      <motion.div className="hidden md:flex flex-col gap-5 text-gray-400">
-        {[
-          { Icon: FaGithub, link: "https://github.com/Ranit-dev2004" },
-          { Icon: FaLinkedin, link: "https://www.linkedin.com/in/ranit-saha-7bba04226/" },
-          { Icon: FaEnvelope, link: "mailto:iamtheceoof@datatreya.com" },
-        ].map(({ Icon, link }, idx) => (
-          <motion.a
-            key={idx}
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative group w-10 h-10 flex items-center justify-center overflow-hidden rounded-full"
-            whileHover={{ scale: 1.2 }}
-            transition={{ type: "spring", stiffness: 250 }}
-          >
-            {/* Water filling background */}
-            <span className="absolute bottom-0 left-0 w-full h-0 bg-cyan-400 group-hover:h-full transition-all duration-500 ease-out" />
+<motion.div
+  className={`flex gap-5 text-gray-400 justify-center mt-6 
+    ${open ? "flex" : "hidden"} md:flex md:flex-col md:gap-5 md:mt-0`}
+>
+  {[
+    { Icon: FaGithub, link: "https://github.com/Ranit-dev2004" },
+    { Icon: FaLinkedin, link: "https://www.linkedin.com/in/ranit-saha-7bba04226/" },
+    { Icon: FaEnvelope, link: "mailto:iamtheceoof@datatreya.com" },
+  ].map(({ Icon, link }, idx) => (
+    <motion.a
+      key={idx}
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative group w-10 h-10 flex items-center justify-center overflow-hidden rounded-full"
+      whileHover={{ scale: 1.2 }}
+      transition={{ type: "spring", stiffness: 250 }}
+    >
+      {/* Water filling background */}
+      <span className="absolute bottom-0 left-0 w-full h-0 bg-cyan-400 group-hover:h-full transition-all duration-500 ease-out" />
+      <Icon size={28} className="relative z-20 text-gray-300 group-hover:text-black transition-colors duration-500" />
+    </motion.a>
+  ))}
+</motion.div>
 
-            {/* Icon */}
-            <Icon
-              size={28}
-              className="relative z-20 text-gray-300 group-hover:text-black transition-colors duration-500"
-            />
-          </motion.a>
-        ))}
-      </motion.div>
     </div>
   );
 };
