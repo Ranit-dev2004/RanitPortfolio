@@ -4,7 +4,7 @@ import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
 import { assets } from "../assets";
 import { motion } from "framer-motion";
 import { Link } from "react-scroll";
-import { NavLink } from "react-router-dom"; // for navigation to Skills page
+import { NavLink } from "react-router-dom"; 
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -19,7 +19,6 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 md:ml-10 left-0 w-full md:w-24 bg-black flex md:flex-col flex-row justify-between md:items-center items-center px-6 md:py-6 h-20 md:h-screen rounded-none md:rounded-2xl shadow-lg z-50">
       
-      {/* Logo */}
       <motion.div
         className="w-20 h-20"
         whileHover={{ scale: 1.15, rotate: 6 }}
@@ -32,7 +31,6 @@ const Navbar = () => {
         />
       </motion.div>
 
-      {/* Mobile Menu Button */}
       <div className="md:hidden">
         {open ? (
           <HiX size={32} className="text-white cursor-pointer" onClick={() => setOpen(false)} />
@@ -41,7 +39,6 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Links */}
       <motion.div
         className={`flex-col ml-5 gap-8 text-gray-400 text-lg items-center font-semibold 
         ${open ? "flex absolute top-20 left-0 w-full bg-black py-6" : "hidden"} 
@@ -84,7 +81,7 @@ const Navbar = () => {
     { Icon: FaGithub, link: "https://github.com/Ranit-dev2004" },
     { Icon: FaLinkedin, link: "https://www.linkedin.com/in/ranit-saha-7bba04226/" },
     { Icon: FaEnvelope, link: "mailto:iamtheceoof@datatreya.com" },
-  ].map(({ Icon, link }, idx) => (
+  ].map(({ link }, idx) => (
     <motion.a
       key={idx}
       href={link}
@@ -93,8 +90,7 @@ const Navbar = () => {
       className="relative group w-10 h-10 flex items-center justify-center overflow-hidden rounded-full"
       whileHover={{ scale: 1.2 }}
       transition={{ type: "spring", stiffness: 250 }}
-    >
-      {/* Water filling background */}
+      >
       <span className="absolute bottom-0 left-0 w-full h-0 bg-cyan-400 group-hover:h-full transition-all duration-500 ease-out" />
       <Icon size={28} className="relative z-20 text-gray-300 group-hover:text-black transition-colors duration-500" />
     </motion.a>

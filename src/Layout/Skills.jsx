@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DecoderText from "../Components/decoder-text";
 
-// Active skills (main)
 const activeSkills = [
   { name: "React", level: 85, category: "Frontend" },
   { name: "Next.js", level: 70, category: "Frontend" },
@@ -19,8 +18,6 @@ const activeSkills = [
   { name: "Ethical Hacking", level: 55, category: "Security" },
 ];
 
-
-// Passive skills (background)
 const passiveSkills = [
   "Git", 
   "GitHub", 
@@ -40,8 +37,6 @@ const passiveSkills = [
   "Webpack"
 ];
 
-
-// Languages
 const languages = [
   { name: "English", level: 80, flag: "🇺🇸" },
   { name: "Hindi", level: 85, flag: "🇮🇳" },
@@ -60,22 +55,17 @@ const SkillCard = ({ skill, index, isVisible }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Cyan glow on hover */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl bg-cyan-400" />
       
-      {/* Category badge */}
       <div className="absolute top-4 right-4 px-2 py-1 bg-black/30 backdrop-blur-sm rounded-full text-xs text-gray-400 border border-white/10">
         {skill.category}
       </div>
       
-      {/* Skill name */}
       <h3 className="text-xl font-bold mb-4 text-white group-hover:text-cyan-50 transition-colors">
         {skill.name}
       </h3>
       
-      {/* Progress container */}
       <div className="space-y-3">
-        {/* Level percentage */}
         <div className="flex justify-between items-center">
           <span className="text-sm text-gray-400">Proficiency</span>
           <span className="text-sm font-semibold text-cyan-400">
@@ -83,13 +73,11 @@ const SkillCard = ({ skill, index, isVisible }) => {
           </span>
         </div>
         
-        {/* Animated progress bar */}
         <div className="relative h-2 bg-white/10 backdrop-blur-sm rounded-full overflow-hidden border border-white/5">
           <div
             className="absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-cyan-400 to-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.3)]"
             style={{ width: isVisible ? `${skill.level}%` : '0%' }}
           />
-          {/* Animated shine effect */}
           <div
             className={`absolute top-0 h-full w-6 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 ${
               isHovered ? 'translate-x-full' : '-translate-x-full'
@@ -97,8 +85,6 @@ const SkillCard = ({ skill, index, isVisible }) => {
             style={{ transitionDelay: isVisible ? '500ms' : '0ms' }}
           />
         </div>
-        
-        {/* Skill level indicators */}
         <div className="flex space-x-1">
           {[...Array(5)].map((_, i) => (
             <div

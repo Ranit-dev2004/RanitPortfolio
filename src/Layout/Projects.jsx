@@ -29,7 +29,6 @@ const cardVariants = {
   }),
 };
 
-// 🎯 Glass 3D Tilt Card Component
 function GlassCard({ project, i }) {
   const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0 });
 
@@ -97,7 +96,6 @@ export default function ProjectsSection() {
       id="projects"
       className="w-full min-h-screen bg-gradient-to-b from-black via-[#0a0a0a] to-black flex flex-col items-center justify-center px-6 py-20"
     >
-      {/* Heading */}
       <motion.h2
         initial={{ opacity: 0, y: -40 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -107,7 +105,6 @@ export default function ProjectsSection() {
         {showDecoder ? <DecoderText text="My Projects" delay={10} speed={30} /> : ""}
       </motion.h2>
 
-      {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl w-full">
         {projects.map((p, i) => (
           <GlassCard key={i} project={p} i={i} />
