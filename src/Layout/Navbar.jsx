@@ -81,7 +81,7 @@ const Navbar = () => {
     { Icon: FaGithub, link: "https://github.com/Ranit-dev2004" },
     { Icon: FaLinkedin, link: "https://www.linkedin.com/in/ranit-saha-7bba04226/" },
     { Icon: FaEnvelope, link: "mailto:iamtheceoof@datatreya.com" },
-  ].map(({ link }, idx) => (
+  ].map(({ Icon, link }, idx) => ( // ✅ Added Icon here
     <motion.a
       key={idx}
       href={link}
@@ -90,12 +90,13 @@ const Navbar = () => {
       className="relative group w-10 h-10 flex items-center justify-center overflow-hidden rounded-full"
       whileHover={{ scale: 1.2 }}
       transition={{ type: "spring", stiffness: 250 }}
-      >
+    >
       <span className="absolute bottom-0 left-0 w-full h-0 bg-cyan-400 group-hover:h-full transition-all duration-500 ease-out" />
       <Icon size={28} className="relative z-20 text-gray-300 group-hover:text-black transition-colors duration-500" />
     </motion.a>
   ))}
 </motion.div>
+
 
     </div>
   );
