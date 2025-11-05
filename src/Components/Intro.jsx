@@ -5,7 +5,6 @@ const roles = [
   "Software Developer",
   "UI/UX Innovator",
   "Entrepreneur",
-  "Tech Educator",
 ];
 
 export default function Intro() {
