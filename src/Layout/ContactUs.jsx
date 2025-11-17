@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 
 const ContactUs = () => {
-  // form states
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,7 +37,6 @@ const ContactUs = () => {
 
   return (
     <section className="min-h-screen bg-black text-gray-200 flex flex-col items-center justify-center px-6 py-20 space-y-24">
-      {/* ===== Contact Section ===== */}
       <div className="max-w-3xl w-full bg-[#111] border border-gray-700 rounded-2xl shadow-xl p-10">
         <h1 className="text-4xl font-serif text-white text-center mb-6 tracking-wide">
           Contact Us
@@ -49,7 +46,6 @@ const ContactUs = () => {
           opportunity, reach out and I’ll respond with care.
         </p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm uppercase text-gray-400 mb-2 tracking-wider">
@@ -107,7 +103,6 @@ const ContactUs = () => {
         </p>
       </div>
 
-      {/* ===== Download Resume Section ===== */}
       <div className="max-w-2xl w-full bg-[#111] border border-gray-700 rounded-2xl shadow-xl p-10 text-center">
         <h2 className="text-3xl font-serif text-white mb-4 tracking-wide">
           Download My Resume

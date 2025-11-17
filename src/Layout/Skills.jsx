@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DecoderText from "../Components/decoder-text";
+import Footer from "./Footer";
 
 const activeSkills = [
   { name: "React", level: 85, category: "Frontend" },
@@ -346,6 +347,7 @@ export default function Skills() {
             />
           ))}
         </svg>
+        <Footer />
       </div>
 
       <style jsx>{`
