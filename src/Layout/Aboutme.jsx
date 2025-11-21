@@ -62,7 +62,7 @@ export default function AboutMe() {
 
           <div className="flex justify-center md:justify-start">
             <a
-  href="#contact"
+  href="contact"
   className="water-btn relative inline-flex justify-center items-center w-full sm:w-80 px-6 py-3 rounded-full font-semibold text-cyan-400 border border-cyan-400"
 >
   <span className="relative z-10">Share your thoughts with me</span>
