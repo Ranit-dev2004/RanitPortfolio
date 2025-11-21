@@ -31,10 +31,7 @@
               powerPreference: "high-performance",
             }}
           >
-            {/* Softer ambient so spotlight is visible */}
             <ambientLight intensity={0.15} color="#404040" />
-
-            {/* Fill directional light */}
             <directionalLight
               position={[10, 15, 5]}
               intensity={0.8}
@@ -42,28 +39,20 @@
               castShadow
               shadow-mapSize={[1024, 1024]}
             />
-
-            {/* Spotlight that points at target */}
             <spotLight
-              position={[0, 10, 8]}   // above & front
+              position={[0, 10, 8]}
               angle={0.35}
               penumbra={0.5}
-              intensity={4}           // brighter
+              intensity={4}
               color="#ffffff"
               castShadow
               shadow-mapSize={[2048, 2048]}
               target={spotTarget.current}
             />
-
-            {/* Invisible target for spotlight */}
             <object3D ref={spotTarget} position={[0, 3, 0]} />
-
-            {/* Angel model */}
             <Suspense fallback={null}>
               <AngelModel />
             </Suspense>
-
-            {/* Orbit controls */}
             <OrbitControls
               enableZoom={false}
               enablePan={false}

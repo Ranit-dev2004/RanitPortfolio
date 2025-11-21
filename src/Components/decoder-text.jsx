@@ -28,6 +28,11 @@ export default function DecoderText({ text, delay = 0, speed = 50, className = "
     let animation;
 
     const render = () => {
+      // 🐛 FIX: Check if the ref is attached to the DOM element before using it
+      if (!containerRef.current) {
+        return; 
+      }
+      
       const html = output
         .map((ch) => {
           if (ch === "") {
@@ -38,12 +43,14 @@ export default function DecoderText({ text, delay = 0, speed = 50, className = "
           }
         })
         .join("");
+      
+      // The error occurred on this line:
       containerRef.current.innerHTML = html;
     };
 
     const animate = () => {
       frame++;
-      const progress = Math.floor(frame / (speed / 2)); // reveal one letter every few frames
+      const progress = Math.floor(frame / (speed / 2)); 
       if (progress < letters.length) {
         output[progress] = letters[progress];
       }

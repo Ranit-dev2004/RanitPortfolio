@@ -62,14 +62,12 @@ export default function AboutMe() {
 
           <div className="flex justify-center md:justify-start">
             <a
-              href="#contact"
-              className="relative inline-flex justify-center items-center w-full sm:w-80 px-6 py-3 rounded-full font-semibold text-cyan-400 border border-cyan-400 overflow-hidden group transition"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-cyan-200 to-cyan-400 opacity-0 group-hover:opacity-100 transition duration-700 [mask-image:linear-gradient(to_right,transparent,black,transparent)] animate-glow rounded-full" />
-              <span className="relative flex items-center gap-2 z-10">
-                Share your thoughts with me
-              </span>
-            </a>
+  href="#contact"
+  className="water-btn relative inline-flex justify-center items-center w-full sm:w-80 px-6 py-3 rounded-full font-semibold text-cyan-400 border border-cyan-400"
+>
+  <span className="relative z-10">Share your thoughts with me</span>
+  <span className="water-fill-icon"></span> 
+</a>
           </div>
         </div>
 

@@ -1,13 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
-body {
-  font-family: 'Sour Gummy', sans-serif;
-}
-
-/* Optional utility if you want easy switching */
-.libertinus {
-  font-family: 'Libertinus Serif', serif;
-}
-
+/* Tailwind must come first */
 @import "tailwindcss";
+
+/* IMPORTANT: Wrap font imports inside an empty layer */
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+}
+
+/* Now put your CSS in proper layers */
+
+@layer base {
+  body {
+    font-family: "Sour Gummy", sans-serif;
+  }
+
+  .libertinus {
+    font-family: "Libertinus Serif", serif;
+  }
+}
+
+@layer components {
+  /* Global Button Container Styles */
+  .water-btn {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    /* Add transition for border and shadow */
+    transition: border-color 0.4s ease, box-shadow 0.4s ease; 
+  }
+
+  /* Water Fill for the Icon/Primary Button (Dynamic Slosh Effect) */
+  .water-fill-icon {
+    position: absolute;
+    bottom: -150%; 
+    left: -50%;
+    width: 200%;
+    height: 300%;
+    /* Realistic gradient for depth */
+    background: linear-gradient(
+        to top,
+        rgba(34, 211, 238, 0.4) 0%,
+        rgba(34, 211, 238, 0.15) 100%
+    );
+    backdrop-filter: blur(4px);
+    /* Transition settings for the movement */
+    transition: bottom 0.8s ease, transform 0.8s ease; 
+    /* Initial state transformation */
+    transform: skewY(-4deg) skewX(0deg); 
+  }
+
+  /* Button Hover State - Triggers the Fill and Slosh */
+  .water-btn:hover .water-fill-icon {
+    bottom: -50%; /* Position to fully cover the button area */
+    transform: skewY(-4deg) skewX(4deg); /* Quick slosh effect */
+  }
+
+  /* Button Wet Edge/Glow on Hover */
+  .water-btn:hover {
+    border-color: rgba(34, 211, 238, 0.8);
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  }
+
+  /* Text Transition for Visibility */
+  .water-btn .relative.z-10 {
+    transition: color 0.5s ease;
+  }
+
+  .water-btn:hover .relative.z-10 {
+    color: #ffffff; /* Change text color for better contrast against cyan fill */
+    transition-delay: 0.2s; /* Small delay for a nicer visual hierarchy */
+  }
+}
