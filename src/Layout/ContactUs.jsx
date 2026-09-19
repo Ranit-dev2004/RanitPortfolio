@@ -39,7 +39,7 @@ const ContactUs = () => {
     <section className="min-h-screen bg-black text-gray-200 flex flex-col items-center justify-center px-6 py-20 space-y-24">
       <div className="max-w-3xl w-full bg-[#111] border border-gray-700 rounded-2xl shadow-xl p-10">
         <h1 className="text-4xl font-serif text-white text-center mb-6 tracking-wide">
-          Contact Us
+          Contact Me
         </h1>
         <p className="text-gray-400 text-center mb-10 font-light">
           I'd love to hear from you. Whether it’s a question, feedback, or an

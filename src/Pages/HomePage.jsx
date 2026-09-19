@@ -1,58 +1,85 @@
-    import { Canvas } from "@react-three/fiber";
-    import { OrbitControls } from "@react-three/drei";
-    import { Suspense, useRef } from "react";
-    import AngelModel from "../Components/Angelmodel";
-    import Navbar from "../Layout/Navbar";
-    import Intro from "../Components/Intro";
-    import ProjectsSection from "../Layout/Projects";
-    import * as THREE from "three";
-    import AboutMe from "../Layout/Aboutme";
-    import Footer from "../Layout/Footer";
-    import SponsorSection from "../Components/SponsorSection";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { Suspense, useRef, useState, useEffect } from "react";
+import AngelModel from "../Components/Angelmodel";
+import Navbar from "../Layout/Navbar";
+import Intro from "../Components/Intro";
+import ProjectsSection from "../Layout/Projects";
+import AboutMe from "../Layout/Aboutme";
+import Footer from "../Layout/Footer";
+import SponsorSection from "../Components/SponsorSection";
 
-    export default function Homepage() {
-      const spotTarget = useRef();
+export default function Homepage() {
+  const spotTarget = useRef();
+  const [isDark, setIsDark] = useState(true);
 
-      return (
-        <div className="w-full h-screen bg-black">
-          <Navbar />
-          <Intro />
+  useEffect(() => {
+    const root = document.documentElement;
+    setIsDark(root.classList.contains("dark"));
+
+    const observer = new MutationObserver(() => {
+      setIsDark(root.classList.contains("dark"));
+    });
+
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="relative w-full min-h-screen bg-[var(--bg-primary)] transition-colors duration-400">
+      <Navbar />
+
+      {/* Hero Section containing 3D Canvas */}
+      <section className="relative w-full h-screen overflow-hidden">
+        <Intro />
+
+        {/* 3D Canvas Wrapper Container */}
+        <div className="absolute inset-0 z-0 pointer-events-auto">
           <Canvas
+            // Caps pixel density at 1.5x to prevent lag on 4K / Retina displays
+            dpr={[1, 1.5]}
             camera={{
               position: [0, 2, 10],
               fov: 45,
               near: 0.1,
-              far: 1000,
+              far: 100,
             }}
-            shadows
             gl={{
-              antialias: true,
+              antialias: false,
               alpha: true,
               powerPreference: "high-performance",
+              stencil: false,
+              depth: true,
             }}
           >
-            <ambientLight intensity={0.15} color="#404040" />
+            {/* Dynamic ambient light */}
+            <ambientLight
+              intensity={isDark ? 0.35 : 1.2}
+              color={isDark ? "#404040" : "#ffffff"}
+            />
+
+            {/* Key Light (Shadow maps removed for GPU speed) */}
             <directionalLight
               position={[10, 15, 5]}
-              intensity={0.8}
+              intensity={isDark ? 0.8 : 1.5}
               color="#ffffff"
-              castShadow
-              shadow-mapSize={[1024, 1024]}
             />
+
+            {/* Accent SpotLight */}
             <spotLight
               position={[0, 10, 8]}
               angle={0.35}
               penumbra={0.5}
-              intensity={4}
+              intensity={isDark ? 3 : 1.5}
               color="#ffffff"
-              castShadow
-              shadow-mapSize={[2048, 2048]}
               target={spotTarget.current}
             />
             <object3D ref={spotTarget} position={[0, 3, 0]} />
+
             <Suspense fallback={null}>
               <AngelModel />
             </Suspense>
+
             <OrbitControls
               enableZoom={false}
               enablePan={false}
@@ -64,10 +91,14 @@
               rotateSpeed={0.6}
             />
           </Canvas>
-          <ProjectsSection />
-          <AboutMe  />
-          <SponsorSection />
-          <Footer />
         </div>
-      );
-    }
+      </section>
+
+      {/* Page Sections */}
+      <ProjectsSection />
+      <AboutMe />
+      <SponsorSection />
+      <Footer />
+    </div>
+  );
+}

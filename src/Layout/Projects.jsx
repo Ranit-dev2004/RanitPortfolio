@@ -1,114 +1,351 @@
-import { motion, useInView } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+  useMotionTemplate,
+  useMotionValueEvent,
+  useReducedMotion,
+} from "framer-motion";
+import { useState, useRef, useEffect, useLayoutEffect, memo } from "react";
 import DecoderText from "../Components/decoder-text";
 
 const projects = [
   {
     title: "Jodiac",
-    desc: "Worked on developing an e-commerce app concept where users can upload their own clothing designs. My role focused on building the app structure and front-end flow.",
+    year: "2025",
+    role: "Front-end / App structure",
+    desc: "An e-commerce concept where people upload their own clothing designs. I built the app structure and the front-end flow.",
     link: "https://jodiac-7ahm.vercel.app/",
+    image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1600&auto=format&fit=crop",
   },
   {
     title: "Datatreya",
-    desc: "A personal initiative aiming to create a platform that connects startups and investors. I contributed by designing the MVP and shaping the idea into a structured project.",
-    link: "http://datatreya.com/",
+    year: "2025",
+    role: "MVP design / Product",
+    desc: "A personal initiative connecting startups with investors. I designed the MVP and shaped a loose idea into a structured project.",
+    link: "https://dattatyeaweb.vercel.app/",
+    image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1600&auto=format&fit=crop",
   },
   {
     title: "Vibe On Top",
-    desc: "Worked on building an online presence for a fashion brand. My contribution included developing the digital side of the brand — from structuring the store to ensuring smooth customer interaction.",
+    year: "2024",
+    role: "Storefront / Digital",
+    desc: "The online presence for a fashion brand. I built the digital side, from structuring the store to the customer flow.",
     link: "https://www.vibeontop.com/",
+    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600&auto=format&fit=crop",
+  },
+  {
+    title: "Rai",
+    year: "2025",
+    role: "AI Assistant / Desktop",
+    desc: "A local AI assistant built around LM Studio. Rai can understand voice commands, respond naturally, and interact with the computer through local tools.",
+    link: "https://github.com/Ranit-dev2004/Rai.git",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop",
+  },
+  {
+    title: "InvestHind",
+    year: "2026",
+    role: "Product / Investor Platform",
+    desc: "An investor discovery platform designed to help founders present their ideas, track milestones and connect with potential investors, mentors and experts.",
+    link: "https://investhind.com/",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1600&auto=format&fit=crop",
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.2, type: "spring", stiffness: 90, damping: 12 },
-  }),
-};
+const DeckCard = memo(function DeckCard({ project, i, count, scrollYProgress }) {
+  const center = count > 1 ? i / (count - 1) : 0.5;
+  const step = count > 1 ? 1 / (count - 1) : 1;
+  const range = [center - step, center, center + step];
 
-function GlassCard({ project, i }) {
-  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0 });
+  const scrollRotateY = useTransform(scrollYProgress, range, [18, 0, -18]);
+  const scale = useTransform(scrollYProgress, range, [0.85, 1, 0.85]);
+  const opacity = useTransform(scrollYProgress, range, [0.4, 1, 0.4]);
 
-  const handleMouseMove = (e) => {
-    const card = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - card.left;
-    const y = e.clientY - card.top;
+  const numeralX = useTransform(scrollYProgress, range, [80, 0, -80]);
+  const titleX = useTransform(scrollYProgress, range, [30, 0, -30]);
+  const bodyX = useTransform(scrollYProgress, range, [15, 0, -15]);
 
-    const rotateX = (y / card.height - 0.5) * -20;
-    const rotateY = (x / card.width - 0.5) * 20;
+  const tiltX = useSpring(useMotionValue(0), { stiffness: 120, damping: 20 });
+  const tiltY = useSpring(useMotionValue(0), { stiffness: 120, damping: 20 });
+  const rotateY = useTransform([scrollRotateY, tiltY], ([s, t]) => s + t);
 
-    setTransform({ rotateX, rotateY });
+  const [lit, setLit] = useState(false);
+  const glowX = useMotionValue(50);
+  const glowY = useMotionValue(50);
+  const glow = useMotionTemplate`radial-gradient(350px circle at ${glowX}% ${glowY}%, rgba(34,211,238,0.22), transparent 70%)`;
+
+  const handleMove = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    tiltX.set((py - 0.5) * -10);
+    tiltY.set((px - 0.5) * 10);
+    glowX.set(px * 100);
+    glowY.set(py * 100);
   };
 
-  const handleMouseLeave = () => {
-    setTransform({ rotateX: 0, rotateY: 0 });
+  const handleLeave = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+    setLit(false);
   };
 
   return (
-    <motion.div
-      key={i}
-      custom={i}
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      whileHover={{ scale: 1.05 }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+    <motion.article
+      onMouseMove={handleMove}
+      onMouseEnter={() => setLit(true)}
+      onMouseLeave={handleLeave}
       style={{
-        transform: `perspective(1000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg)`,
+        scale,
+        opacity,
+        rotateX: tiltX,
+        rotateY,
         transformStyle: "preserve-3d",
       }}
-      className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8 text-center shadow-2xl transition-all duration-300"
+      className="group relative shrink-0 w-[85vw] max-w-[460px] h-[480px]
+                 rounded-[28px] border border-black/15 dark:border-white/10
+                 bg-gray-900 shadow-2xl overflow-hidden transform-gpu transition-all duration-500"
     >
-      <h3 className="text-2xl font-semibold text-white mb-3">{project.title}</h3>
-      <div className="w-12 h-1 bg-gradient-to-r from-white/40 to-transparent mx-auto mb-4 rounded" />
-      <p className="text-gray-400 text-sm mb-6">{project.desc}</p>
-      <motion.a
-        href={project.link}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="inline-block px-5 py-2 border border-gray-600 text-gray-200 rounded-lg font-medium hover:bg-white hover:text-black transition"
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover opacity-50 dark:opacity-40 
+                     transition-transform duration-700 ease-out group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
+      </div>
+      <motion.div
+        aria-hidden
+        style={{ backgroundImage: glow, opacity: lit ? 1 : 0 }}
+        className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-300"
+      />
+
+      <motion.span
+        aria-hidden
+        style={{ x: numeralX, transform: "translateZ(-30px)" }}
+        className="space-grotesk pointer-events-none absolute -bottom-8 -right-2 z-10
+                   text-[11rem] leading-none font-bold tracking-tighter
+                   text-white/10 select-none"
       >
-        View Project
-      </motion.a>
-      <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 blur-2xl transition duration-500 -z-10" />
-    </motion.div>
+        {i + 1}
+      </motion.span>
+
+      <div className="relative h-full flex flex-col justify-end p-8 z-20">
+        <motion.p
+          style={{ x: bodyX }}
+          className="inter text-xs tracking-wider uppercase font-semibold text-cyan-400 mb-auto"
+        >
+          {project.year} &nbsp;/&nbsp; {project.role}
+        </motion.p>
+
+        <motion.h3
+          style={{ x: titleX, transform: "translateZ(40px)" }}
+          className="space-grotesk text-3xl sm:text-4xl font-bold tracking-tight
+                     text-white mb-3"
+        >
+          {project.title}
+        </motion.h3>
+
+        <motion.p
+          style={{ x: bodyX }}
+          className="inter text-sm leading-relaxed text-gray-200 max-w-[38ch] mb-6"
+        >
+          {project.desc}
+        </motion.p>
+
+        <motion.a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          style={{ transform: "translateZ(30px)" }}
+          className="inter self-start px-6 py-2.5 rounded-full font-medium text-sm
+                     border border-white/30 text-white bg-white/10 backdrop-blur-md
+                     hover:bg-white hover:text-black
+                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400 
+                     transition-colors duration-200"
+        >
+          Visit {project.title}
+        </motion.a>
+      </div>
+    </motion.article>
+  );
+});
+
+function StaticDeck() {
+  return (
+    <div className="flex flex-col gap-6 px-4 py-8 w-full max-w-lg mx-auto">
+      {projects.map((p) => (
+        <article
+          key={p.title}
+          className="relative w-full rounded-[24px] p-6 sm:p-8 overflow-hidden
+                     border border-black/10 dark:border-white/10 bg-gray-900 shadow-lg"
+        >
+          <div className="absolute inset-0 z-0">
+            <img
+              src={p.image}
+              alt={p.title}
+              className="w-full h-full object-cover opacity-35"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+          </div>
+
+          <div className="relative z-10">
+            <p className="inter text-xs tracking-wider uppercase font-semibold text-cyan-400 mb-4">
+              {p.year} &nbsp;/&nbsp; {p.role}
+            </p>
+            <h3 className="space-grotesk text-2xl sm:text-3xl font-bold text-white mb-3">
+              {p.title}
+            </h3>
+            <p className="inter text-sm leading-relaxed text-gray-200 mb-6">
+              {p.desc}
+            </p>
+            <a
+              href={p.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inter inline-block px-5 py-2 rounded-full text-sm font-medium
+                         border border-white/30 text-white bg-white/10 backdrop-blur-md"
+            >
+              Visit {p.title}
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
   );
 }
 
 export default function ProjectsSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const sectionRef = useRef(null);
+  const trackRef = useRef(null);
+
+  const prefersReduced = useReducedMotion();
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [travel, setTravel] = useState(0);
+  const [active, setActive] = useState(0);
+
+  const headingRef = useRef(null);
+  const isInView = useInView(headingRef, { once: true, margin: "-80px" });
   const [showDecoder, setShowDecoder] = useState(false);
 
   useEffect(() => {
-    if (isInView) {
-      setShowDecoder(true);
-    }
+    if (isInView) setShowDecoder(true);
   }, [isInView]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const sync = () => setIsDesktop(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!isDesktop) return;
+    const el = trackRef.current;
+    if (!el) return;
+    const measure = () => setTravel(Math.max(0, el.scrollWidth - el.clientWidth));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isDesktop]);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  const rawX = useTransform(scrollYProgress, [0, 1], [0, -travel]);
+  const x = useSpring(rawX, { stiffness: 45, damping: 15, mass: 0.2 });
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    setActive(Math.round(v * (projects.length - 1)));
+  });
+
+  const pinned = isDesktop && !prefersReduced;
 
   return (
     <section
-      ref={ref}
+      ref={sectionRef}
       id="projects"
-      className="w-full min-h-screen bg-gradient-to-b from-black via-[#0a0a0a] to-black flex flex-col items-center justify-center px-6 py-20"
+      style={{ height: pinned ? `${projects.length * 90}vh` : "auto" }}
+      className="relative w-full bg-white dark:bg-[var(--bg-primary)] transition-colors duration-500 py-12 md:py-0"
     >
-      <motion.h2
-        initial={{ opacity: 0, y: -40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6 }}
-        className="text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-16 text-center"
+      <div
+        className={`${
+          pinned ? "sticky top-0 h-screen overflow-hidden flex flex-col justify-center" : "h-auto w-full"
+        }`}
       >
-        {showDecoder ? <DecoderText text="My Projects" delay={10} speed={30} /> : ""}
-      </motion.h2>
+<motion.div className="flex flex-col items-center mb-8 md:mb-12">
+          <motion.h2
+            ref={headingRef}
+            initial={{ opacity: 0, y: -20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="space-grotesk text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight
+                       text-gray-900 dark:text-white text-center pb-3"
+          >
+            {showDecoder ? <DecoderText text="My Projects" delay={10} speed={30} /> : "\u00A0"}
+          </motion.h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl w-full">
-        {projects.map((p, i) => (
-          <GlassCard key={i} project={p} i={i} />
-        ))}
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={isInView ? { scaleX: 1, opacity: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="h-[2px] w-24 sm:w-32 bg-gradient-to-r from-transparent via-gray-900 dark:via-white to-transparent origin-center rounded-full"
+          />
+        </motion.div>
+
+        {pinned ? (
+          <>
+            <div
+              ref={trackRef}
+              style={{ perspective: "1200px" }}
+              className="w-full overflow-hidden"
+            >
+              <motion.div
+                style={{ x }}
+                className="flex gap-8 items-center will-change-transform
+                           px-[calc(50vw-min(42vw,230px))]"
+              >
+                {projects.map((p, i) => (
+                  <DeckCard
+                    key={p.title}
+                    project={p}
+                    i={i}
+                    count={projects.length}
+                    scrollYProgress={scrollYProgress}
+                  />
+                ))}
+              </motion.div>
+            </div>
+
+            <div className="mt-8 flex items-center justify-center gap-3">
+              {projects.map((p, i) => (
+                <span
+                  key={p.title}
+                  className={`h-[2px] rounded-full transition-all duration-300 ${
+                    i === active
+                      ? "w-12 bg-gray-900 dark:bg-white"
+                      : "w-5 bg-gray-300 dark:bg-white/20"
+                  }`}
+                />
+              ))}
+              <span className="inter ml-4 text-xs text-gray-400 dark:text-gray-500">
+                Keep scrolling
+              </span>
+            </div>
+          </>
+        ) : (
+          <StaticDeck />
+        )}
       </div>
     </section>
   );

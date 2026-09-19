@@ -4,7 +4,7 @@ export default function CustomCursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [clicked, setClicked] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const [cursorType, setCursorType] = useState('default');
+  const [cursorType, setCursorType] = useState("default");
 
   useEffect(() => {
     const moveCursor = (e) => {
@@ -18,16 +18,16 @@ export default function CustomCursor() {
       const target = e.target;
       if (target.matches('a, button, [data-cursor="pointer"]')) {
         setHovering(true);
-        setCursorType('pointer');
-      } else if (target.matches('h1, h2, h3, h4, h5, h6')) {
+        setCursorType("pointer");
+      } else if (target.matches("h1, h2, h3, h4, h5, h6")) {
         setHovering(true);
-        setCursorType('heading');
-      } else if (target.matches('input, textarea, [contenteditable]')) {
+        setCursorType("heading");
+      } else if (target.matches("input, textarea, [contenteditable]")) {
         setHovering(true);
-        setCursorType('text');
+        setCursorType("text");
       } else {
         setHovering(false);
-        setCursorType('default');
+        setCursorType("default");
       }
     };
 
@@ -37,7 +37,7 @@ export default function CustomCursor() {
     document.addEventListener("mouseover", handleHover);
 
     // Hide default cursor globally
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.innerHTML = `* { cursor: none !important; }`;
     document.head.appendChild(style);
 
@@ -52,51 +52,52 @@ export default function CustomCursor() {
 
   const getMainCursor = () => {
     switch (cursorType) {
-      case 'pointer':
+      case "pointer":
         return (
           <div className="relative">
             {/* Hexagon shape */}
-            <div 
-              className="w-6 h-6 bg-white rotate-45 animate-spin"
-              style={{ 
-                animationDuration: '3s',
-                clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)'
-              }} 
+            <div
+              className="w-6 h-6 bg-cyan-500 dark:bg-cyan-400 rotate-45 animate-spin"
+              style={{
+                animationDuration: "3s",
+                clipPath:
+                  "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+              }}
             />
-            <div className="absolute inset-0 w-6 h-6 bg-white/20 rotate-45 animate-pulse" 
-              style={{ 
-                clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)'
+            <div
+              className="absolute inset-0 w-6 h-6 bg-cyan-500/30 dark:bg-cyan-400/30 rotate-45 animate-pulse"
+              style={{
+                clipPath:
+                  "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
               }}
             />
           </div>
         );
-      case 'heading':
+      case "heading":
         return (
           <div className="relative">
             {/* Triangle */}
-            <div 
-              className="w-5 h-5 bg-white animate-bounce"
-              style={{ 
-                clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
-              }} 
+            <div
+              className="w-5 h-5 bg-gray-900 dark:bg-white animate-bounce"
+              style={{
+                clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
+              }}
             />
-            <div className="absolute top-1.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white/80 rounded-full" />
+            <div className="absolute top-1.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-gray-900/80 dark:bg-white/80 rounded-full" />
           </div>
         );
-      case 'text':
-        return (
-          <div className="w-1 h-7 bg-white animate-pulse" />
-        );
+      case "text":
+        return <div className="w-1 h-7 bg-gray-900 dark:bg-white animate-pulse" />;
       default:
         return (
           <div className="relative">
             {/* Main dot with orbiting elements */}
-            <div className="w-2.5 h-2.5 bg-white rounded-full" />
-            <div 
-              className="absolute -top-1.5 -left-1.5 w-5 h-5 border border-white/30 rounded-full animate-spin"
-              style={{ animationDuration: '4s' }}
+            <div className="w-2.5 h-2.5 bg-gray-900 dark:bg-white rounded-full transition-colors duration-300" />
+            <div
+              className="absolute -top-1.5 -left-1.5 w-5 h-5 border border-gray-900/40 dark:border-white/30 rounded-full animate-spin transition-colors duration-300"
+              style={{ animationDuration: "4s" }}
             >
-              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white/60 rounded-full" />
+              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-gray-900/80 dark:bg-white/60 rounded-full" />
             </div>
           </div>
         );
@@ -112,9 +113,9 @@ export default function CustomCursor() {
         `}
         style={{
           transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%)`,
-          filter: hovering 
-            ? 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.4))' 
-            : 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.6))'
+          filter: hovering
+            ? "drop-shadow(0 0 15px rgba(0, 255, 255, 0.8)) drop-shadow(0 0 30px rgba(0, 255, 255, 0.4))"
+            : "drop-shadow(0 0 10px rgba(0, 0, 0, 0.3))",
         }}
       >
         {getMainCursor()}
@@ -132,13 +133,13 @@ export default function CustomCursor() {
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className={`absolute border border-white/10 rounded-full animate-ping
-              ${i === 0 ? 'w-12 h-12' : i === 1 ? 'w-16 h-16' : 'w-20 h-20'}
+            className={`absolute border border-gray-900/20 dark:border-white/10 rounded-full animate-ping
+              ${i === 0 ? "w-12 h-12" : i === 1 ? "w-16 h-16" : "w-20 h-20"}
             `}
             style={{
               animationDelay: `${i * 0.2}s`,
-              animationDuration: '2s',
-              transform: 'translate(-50%, -50%)'
+              animationDuration: "2s",
+              transform: "translate(-50%, -50%)",
             }}
           />
         ))}
@@ -148,14 +149,16 @@ export default function CustomCursor() {
       <div
         className="fixed top-0 left-0 pointer-events-none z-[9997] transition-transform duration-500 ease-out"
         style={{
-          transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%) scale(${hovering ? 1.5 : 1})`,
+          transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%) scale(${
+            hovering ? 1.5 : 1
+          })`,
         }}
       >
         <div className="relative">
-          <div className="w-3 h-3 bg-white/10 rounded-full animate-pulse" />
-          <div 
-            className="absolute -top-1.5 -left-1.5 w-6 h-6 border border-white/5 rounded-full animate-spin"
-            style={{ animationDuration: '6s', animationDirection: 'reverse' }}
+          <div className="w-3 h-3 bg-gray-900/10 dark:bg-white/10 rounded-full animate-pulse" />
+          <div
+            className="absolute -top-1.5 -left-1.5 w-6 h-6 border border-gray-900/10 dark:border-white/5 rounded-full animate-spin"
+            style={{ animationDuration: "6s", animationDirection: "reverse" }}
           />
         </div>
       </div>
@@ -168,10 +171,10 @@ export default function CustomCursor() {
         }}
       >
         <div className="relative w-full h-full">
-          <div className="absolute inset-0 border border-white/5 rounded-full" />
-          <div 
-            className="absolute inset-1 border-t border-white/10 rounded-full animate-spin"
-            style={{ animationDuration: '8s' }}
+          <div className="absolute inset-0 border border-gray-900/10 dark:border-white/5 rounded-full" />
+          <div
+            className="absolute inset-1 border-t border-gray-900/20 dark:border-white/10 rounded-full animate-spin"
+            style={{ animationDuration: "8s" }}
           />
         </div>
       </div>

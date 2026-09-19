@@ -1,21 +1,58 @@
 /* Tailwind must come first */
 @import "tailwindcss";
 
+/* Enable class-based dark mode variant in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme CSS Variables for Light/Dark Modes */
+:root {
+  --bg-primary: #ffffff;
+  --text-primary: #0f172a;
+  --nav-backdrop: rgba(255, 255, 255, 0.2);
+}
+
+.dark {
+  --bg-primary: #050505; /* Cyberpunk dark background */
+  --text-primary: #f8fafc;
+  --nav-backdrop: rgba(0, 0, 0, 0.2);
+}
+
 /* IMPORTANT: Wrap font imports inside an empty layer */
 @layer base {
   @import url("https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap");
   @import url("https://fonts.googleapis.com/css2?family=Libertinus+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 }
-
-/* Now put your CSS in proper layers */
 
 @layer base {
   body {
-    font-family: "Sour Gummy", sans-serif;
+    font-family: "Inter", sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   .libertinus {
     font-family: "Libertinus Serif", serif;
+  }
+
+  .cormorant {
+    font-family: "Cormorant Garamond", serif;
+  }
+
+  .space-grotesk {
+    font-family: "Space Grotesk", sans-serif;
+  }
+
+  .manrope {
+    font-family: "Manrope", sans-serif;
+  }
+
+  .inter {
+    font-family: "Inter", sans-serif;
   }
 }
 

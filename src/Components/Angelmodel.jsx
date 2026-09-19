@@ -1,66 +1,69 @@
-import { useGLTF, ContactShadows, Environment } from "@react-three/drei";
+import { useGLTF, Environment } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useLayoutEffect } from "react";
+import * as THREE from "three";
 
-function AngelModel() {
+export default function AngelModel() {
   const { scene } = useGLTF("/models/cemetery_angel_-_miller.glb");
   const modelRef = useRef();
 
-  useFrame((state) => {
-    if (modelRef.current) {
-      const t = state.clock.elapsedTime;
+  // Traverse the scene once on load to optimize materials & disable unnecessary shadow passes
+  useLayoutEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        // Lower texture sampling load while maintaining visual quality
+        if (child.material.map) {
+          child.material.map.anisotropy = 2;
+        }
+        // Force materials to use lighter shading calculations
+        child.material.precision = "mediump";
+      }
+    });
+  }, [scene]);
 
-      // floating animation
-      modelRef.current.position.y = -2 + Math.sin(t) * 0.12;
+  useFrame((state, delta) => {
+    if (!modelRef.current) return;
 
-      // smooth follow mouse (pointer.x and pointer.y are between -1 and 1)
-      const mouseX = state.pointer.x * 2; // scale sensitivity
-      const mouseY = state.pointer.y * 1.5;
+    const t = state.clock.elapsedTime;
 
-      // interpolate for smoothness
-      modelRef.current.position.x += (mouseX - modelRef.current.position.x) * 0.05;
-      modelRef.current.rotation.y += (mouseX * 0.5 - modelRef.current.rotation.y) * 0.05;
-      modelRef.current.rotation.x += (mouseY * -0.3 - modelRef.current.rotation.x) * 0.05;
-    }
+    // Y-axis floating animation
+    modelRef.current.position.y = -2 + Math.sin(t) * 0.12;
+
+    // Delta-based interpolation ensures consistent animation speed across 60Hz, 120Hz, and mobile displays
+    const damping = 1 - Math.exp(-4 * delta);
+
+    const targetX = state.pointer.x * 1.5;
+    const targetY = state.pointer.y * 1.0;
+
+    modelRef.current.position.x += (targetX - modelRef.current.position.x) * damping;
+    modelRef.current.rotation.y += (targetX * 0.4 - modelRef.current.rotation.y) * damping;
+    modelRef.current.rotation.x += (targetY * -0.2 - modelRef.current.rotation.x) * damping;
   });
 
   return (
     <group>
-      {/* Angel model */}
       <primitive
         ref={modelRef}
         object={scene}
         scale={3.0}
-        position={[0, 10, 0]}
+        position={[0, -2, 0]}
         rotation={[0, Math.PI * 0.1, 0]}
-        castShadow
-        receiveShadow
       />
 
-      <ContactShadows
-        position={[0, -2.4, 0]}
-        opacity={0.65}
-        scale={25}
-        blur={4.5}
-        far={6}
-        color="#000000"
-      />
-
-      {/* Ambient base light */}
-      <ambientLight intensity={0.25} />
+      {/* Lightweight directional & ambient lighting */}
+      <ambientLight intensity={0.4} />
 
       {/* Warm key light */}
       <directionalLight
         position={[6, 8, 6]}
-        intensity={1.4}
+        intensity={1.2}
         color="#ffb580"
-        castShadow
       />
 
       {/* Cool fill light */}
       <directionalLight
         position={[-6, 4, 6]}
-        intensity={0.8}
+        intensity={0.6}
         color="#64b5f6"
       />
 
@@ -69,15 +72,15 @@ function AngelModel() {
         position={[0, 10, -10]}
         angle={0.5}
         penumbra={1}
-        intensity={1.2}
+        intensity={0.8}
         color="#ffffff"
-        castShadow
       />
 
-      {/* HDRI environment */}
-      <Environment preset="sunset" />
+      {/* HDRI lighting reflection */}
+      <Environment preset="city" />
     </group>
   );
 }
 
-export default AngelModel;
+// Preload the GLTF binary so there's no frame drop when mounting
+useGLTF.preload("/models/cemetery_angel_-_miller.glb");

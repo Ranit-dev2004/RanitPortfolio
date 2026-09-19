@@ -28,7 +28,6 @@ export default function DecoderText({ text, delay = 0, speed = 50, className = "
     let animation;
 
     const render = () => {
-      // 🐛 FIX: Check if the ref is attached to the DOM element before using it
       if (!containerRef.current) {
         return; 
       }
@@ -36,7 +35,6 @@ export default function DecoderText({ text, delay = 0, speed = 50, className = "
       const html = output
         .map((ch) => {
           if (ch === "") {
-            // still decoding
             return `<span class="opacity-70">${glyphs[Math.floor(Math.random() * glyphs.length)]}</span>`;
           } else {
             return `<span>${ch}</span>`;
@@ -44,7 +42,6 @@ export default function DecoderText({ text, delay = 0, speed = 50, className = "
         })
         .join("");
       
-      // The error occurred on this line:
       containerRef.current.innerHTML = html;
     };
 
@@ -59,7 +56,6 @@ export default function DecoderText({ text, delay = 0, speed = 50, className = "
       if (progress < letters.length - 1) {
         animation = requestAnimationFrame(animate);
       } else {
-        // reveal rest instantly
         output.forEach((_, i) => (output[i] = letters[i]));
         render();
       }
